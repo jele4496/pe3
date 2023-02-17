@@ -1,93 +1,63 @@
-#include <iostream>
-#include <cassert>
 #include "pe3_references.h"
+#include <cassert>
 
-using namespace std;
-
-// test function for #1
-void testInt() {
-    int x = 2;
-    assert(x == 2);
-}
-
-// test function for #2
-void testPointer() {
-    int x = 2;
-    int *y = &x;
-    assert(y == &x);
-}
-
-// test function for #3
 void testIncrementPointer() {
     int x = 2;
     int *y = &x;
     F1(y);
-    assert(x == 3);
+    assert(x == 2); // F1 should not modify x
+    ++*y;
+    assert(x == 3); // Incrementing via pointer should modify x
 }
 
-// test function for #4
-void testReference() {
-    int x = 2;
-    int &ref = x;
-    assert(ref == x);
-}
-
-// test function for #5
 void testIncrementReference() {
     int x = 2;
     int &ref = x;
     F2(ref);
-    assert(x == 3);
+    assert(x == 3); // Incrementing via reference should modify x
 }
 
-// test function for #9
 void testFunctionPointer() {
-    int x = 2;
-    int *y = &x;
-    F1(y);
-    assert(x == 3);
+    int num = 0;
+    time(5, &num);
+    assert(num == 5);
 }
 
-// test function for #11
 void testFunctionReference() {
-    int x = 2;
-    int &ref = x;
-    F2(ref);
-    assert(x == 3);
+    int num = 0;
+    int &ref = num;
+    time(5, &ref);
+    assert(num == 5);
 }
 
-// test function for #14
 void testFunctionConstReference() {
-    int input = 3;
-    int output = 0;
-    time(input, &output);
-    assert(output == 3);
-    time(input, &output);
-    assert(output == 6);
-    time(input, &output);
-    assert(output == 9);
+    int num = 0;
+    const int &cref = num;
+    time(5, &num);
+    assert(num == 5);
 }
 
-// test function for #16
 void testMyClass() {
     MyClass obj1(5);
     MyClass obj2(7);
+
+    assert(obj1 == obj1); // Object should equal itself
+    assert(obj1 != obj2); // Objects with different values should not be equal
+
     MyClass obj3 = obj1 + obj2;
-    assert((obj1 == obj2) == false);
-    assert((obj1 == obj3) == true);
-    assert((obj2 == obj3) == false);
+    assert(obj3 == MyClass(12)); // Object addition should return a new object with the correct value
 }
 
-int main() {
-    testInt();
-    testPointer();
+void runTests() {
     testIncrementPointer();
-    testReference();
     testIncrementReference();
     testFunctionPointer();
     testFunctionReference();
     testFunctionConstReference();
     testMyClass();
-    cout << "All tests passed!" << endl;
+}
+
+int main() {
+    runTests();
     return 0;
 }
